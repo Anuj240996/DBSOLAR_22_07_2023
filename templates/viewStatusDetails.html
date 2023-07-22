@@ -1,0 +1,100 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-3">
+    <h5 class="page-title text-center">View Complaint Details</h5>
+    <hr>
+    <div class="card">
+        <div class="card-body" style="background-color: #98a8aa">
+            <table id="example1" class="table table-bordered table-striped" style="background-color: white">
+                <tr>
+                    <th colspan="4" class="text-center text-danger"><h5>-- Personal Information --</h5></th>
+                </tr>
+
+                <tr>
+                    <th>&nbsp;Full Name</th>
+                    <td>{{firereport.FullName}}</td>
+
+                    <th>&nbsp;Contact Number</th>
+                    <td>{{firereport.MobileNumber}}</td>
+                </tr>
+
+                <tr>
+                    <th>&nbsp;Location</th>
+                    <td>{{firereport.Location}}</td>
+
+                    <th>&nbsp;Reporting Time</th>
+                    <td>{{firereport.Postingdate}}</td>
+                </tr>
+
+                <tr>
+                    <th>&nbsp;Message</th>
+                    <td colspan="3">{{firereport.Message}}</td>
+                </tr>
+            </table>
+
+            <table id="example1" class="table table-bordered table-striped" style="background-color: white">
+                <tr>
+                    <th colspan="4" class="text-center text-danger"><h5>-- Engineers Assigned Details --</h5></th>
+                </tr>
+                {% if firereport.AssignTo %}
+                <tr>
+                    <th>&nbsp;Engineers Name</th>
+                    <td>{{firereport.AssignTo.first_name}} {{firereport.AssignTo.last_name}}</td>
+
+                    <th>&nbsp;Employee ID & Designation</th>
+                    <td> DB / {{firereport.AssignTo.id}} - {{firereport.AssignTo.profile.designation}}</td>
+                </tr>
+
+                <tr>
+                    <th>&nbsp;Contact No.</th>
+                    <td>{{firereport.AssignTo.profile.phone}}</td>
+
+                    <th>&nbsp;Assigned Time</th>
+                    <td>{{firereport.AssignedTime}}</td>
+                </tr>
+
+                <tr>
+                    <th>&nbsp;Engineers Address</th>
+                    <td colspan="3">{{firereport.AssignTo.profile.address}}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <th><h4 align="center" style="color:green"> Not Updated Yet </h4></th>
+                </tr>
+                {% endif %}
+            </table>
+
+            {% if reportcount != 0 %}
+            <table id="example1" class="table table-bordered table-striped" style="background-color: white">
+                <tr align="center">
+                                <th colspan="4" class="text-center text-danger"><h5>-- Request Track History --</h5></th>
+                            </tr>
+                            <tr style="background-color: #b3bebe">
+                                <th class="text-center">#</th>
+                                <th>Remark</th>
+                                <th>Status</th>
+                                <th>Remark Date</th>
+                            </tr>
+
+                {% for i in report1 %}
+                <tr>
+                    <td class="text-center">{{forloop.counter}}</td>
+                    <td>{{i.remark}}</td>
+                    <td>{{i.status}}</td>
+                    <td>{{i.postingDate}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+
+            {% if reportcount == 0 %}
+            <h4 align="center" style="color:red"> No Tracking history found </h4>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

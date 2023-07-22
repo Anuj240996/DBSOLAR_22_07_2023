@@ -1,0 +1,87 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+<!--    <form method="post">-->
+<!--        {% csrf_token %}-->
+<!--        <div class="card my-4" style="border : 2px ridge green">-->
+<!--            <h5 class="card-header text-info">Search Report by Name/Mobile No./Location</h5>-->
+<!--            <div class="card-body">-->
+<!--                <div class="input-group">-->
+<!--                    <input type="text" name="searchdata" class="form-control"-->
+<!--                           placeholder="Enter Name/Mobile No/Location"-->
+<!--                           required>-->
+<!--                    <span class="input-group-btn">-->
+<!--                        <button class="btn btn-primary" type="submit">-->
+<!--                        <i class="fas fa-search" style="height: 25px"></i></button>-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+   <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">ALL Complaint Status</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr align="center">
+                                <th>Complaint ID</th>
+                                <th>Name</th>
+                                <th>Mobile Number</th>
+                                <th>Location</th>
+                                <th>Message</th>
+                                <th>Reporting Time</th>
+                                <th>Current Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                          <tbody>
+
+
+                                        {% for i in firereport %}
+
+                                          {% if i.Account_id == all_users %}
+                                            <tr>
+                                              <td align="center">cmp/{{ i.id }}</td>
+                                              <td>{{ i.FullName }}</td>
+                                              <td>{{ i.MobileNumber }}</td>
+                                              <td>{{ i.Location }}</td>
+                                              <td>{{ i.Message }}</td>
+                                              <td>{{ i.Postingdate }}</td>
+                                              <td>{{ i.Status }}</td>
+                                              <td>
+                                                <div class="btn-group">
+                                                  <a class="btn btn-primary" href="{% url 'firereport-viewStatusDetails' i.id %}">
+                                                    <i class="fa fa-eye"></i>
+                                                  </a>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          {% endif %}
+                                        {% endfor %}
+</tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% include 'footer.html' %}
+{% endblock %}

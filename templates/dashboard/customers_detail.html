@@ -1,0 +1,60 @@
+{% extends 'partials/base.html' %}
+{% block title %}Customer Detail Page{% endblock %}
+
+
+{% block content %}
+{% include 'partials/topside.html' %}
+<div class="row my-4">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                Employee Details
+            </div>
+            <div class="row p-3">
+                <div class="col-md-8">
+                    <table class="table table-borderless">
+                        <thead>
+                            <span class="h4">Porfile Information</span>
+                            <hr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ customers.first_name }} {{ customers.last_name }}</td>
+                            </tr>
+                             <tr>
+                                <th>Employee ID</th>
+                                <td>DB / {{ customers.id }}</td>
+                            </tr>
+                             <tr>
+                                <th>Department-Designation</th>
+                                <td>{{ customers.profile.department }} - {{ customers.profile.designation }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ customers.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone</th>
+                                <td>{{ customers.profile.phone }}</td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>{{ customers.profile.address }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <img class="img-thumbnail img-width:1000" src="{{ customers.profile.image.url }}" alt="profile-image" width="1200" height="1200">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

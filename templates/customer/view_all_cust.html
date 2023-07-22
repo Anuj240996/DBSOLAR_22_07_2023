@@ -1,0 +1,225 @@
+{% extends 'partials/base.html' %}
+{% block title %}Order Page{% endblock %}
+{% load static %}
+
+{% block content %}
+<style>
+        html, body {
+      min-height: 50%;
+      }
+      body, div, form, input, select, textarea, label, p {
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+           .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+      }
+      form {
+      width: 100%;
+      padding: 10px;
+      border-radius: 1px;
+      background: #fff;
+      box-shadow: 0 0 0;
+      }
+      .      input, select, textarea {
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      }
+      input {
+      width: calc(100% - 10px);
+      padding: 5px;
+      }
+      input[type="date"] {
+      padding: 4px 5px;
+      }
+
+      .item:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
+      color:  #fff;
+      }
+      .item input:hover, .item select:hover, .item textarea:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 3px 0  #669999;
+      color: #000;
+      }
+      .item {
+      position: relative;
+      margin: 0 0;
+      }
+
+
+      .colums {
+      display:flex;
+      justify-content:space-between;
+      flex-direction:row;
+      flex-wrap:wrap;
+      }
+      .colums div {
+      width:42%;
+      }
+
+
+
+
+
+
+      .btn-block {
+      margin-top: 20px;
+      }
+      button {
+      margin-top: 18px;
+      width: 150px;
+      height:50px;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      background:  #669999;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover {
+      background:  #fff;
+      .btn-shadow: 0 2px 9px 0 rgba(0, 0, 0, .25), 0 3px 5px 13px rgba(0, 0, 0, 0.02)
+      }
+
+
+      .btn:hover p, .btn:hover i, .question:hover p, .question label:hover {
+      color:  green;
+      }
+
+
+
+      }
+</style>
+<div class="wrapper">
+<div class="content container-fluid">
+<div class="page-header">
+     <div class="row align-items-center">
+         <div class="col">
+            <h3 class="page-title">Consumer List</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard-index' %}"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'customer-view_all' %}">Dashboard</a></li>
+                <li class="breadcrumb-item active">Consumer List</li>
+            </ul>
+         </div>
+     </div>
+</div>
+
+
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div class="card card-table">
+                        <div class="card-body">
+                           <div class="table-responsive">
+                              <form method="post" hx-post="" hx-target="body">
+
+                                   {% csrf_token %}
+                        <div class="row mb-1">
+
+                           <div class="col-md-5">
+                              <label>Employee First/Last Name</label><br>
+                              <input type="text" id="name" name="name" value="{{ name }}" placeholder="Enter Name/Mobile/Cust_id/city" align="right"><br>
+                           </div>
+
+                           <div class="col-md-5">
+                              <label>Department</label><br>
+                              <input type="text" id="dept" name="dept"  placeholder="Enter Department"><br>
+<!--                              <select id="dept">-->
+<!--                               {% for dept in dept %}-->
+<!--                                   <option value="{{ dept.0 }}">{{ dept.1 }}</option>-->
+<!--                               {% endfor %}-->
+<!--                              </select>-->
+                           </div>
+                           <!--        <button type="submit" class="btn btn-primary">Submit</button>-->
+                         <div class="col-md-2">
+                            <button  class="btn btn-defalut" type="submit"><i class='fas fa-search-plus fa-3x float-left'></i></button>
+                         </div>
+                        </div>
+                     </form>
+
+
+
+                              {% if emps %}
+<!--                               <h4 align="center">Result against "<span style="color: red">{{name}}</span>" keyword </h4>-->
+                               <div class="table-responsive">
+                              <table class="table table-hover table-center table.dataTable.table-sm mb-0 datatable table.sm">
+                                 <thead class="table-success">
+                                    <tr>
+                                       <th scope="col">Sr No.</th>
+                                       <th scope="col">Cust id</th>
+                                        <th scope="col">Username</th>
+                                       <th scope="col">Consumer / Farm Name</th>
+                                       <th scope="col">Capacity</th>
+                                       <th scope="col">UPS Soft</th>
+                                       <th scope="col">Consumer Type</th>
+                                       <th scope="col">Mobile</th>
+                                       <th scope="col">City</th>
+                                       <th scope="col">Activation Date</th>
+                                       <th scope="col">Email</th>
+                                       <th class="text-center">Action</th>
+                                    </tr>
+                                 </thead>
+
+                                 <tbody>
+                                 {% for Cust in emps %}
+                                    <tr>
+                                       <td>{{forloop.counter}}</td>
+                                       <td>{{Cust.Cust_id}}</td>
+                                       <td>{{Cust.new_customer.username}}</td>
+                                       {% if Cust.Comp_name %}
+                                        <td class="text-capitalize">
+                                          <a href="{% url 'customer-customer-updatepage' Cust.Cust_id %}" class="text-capitalize">{{Cust.Comp_name}}</a>
+                                        </td>
+                                       {% else %}
+                                        <td class="text-capitalize">
+                                          <a href="{% url 'customer-customer-updatepage' Cust.Cust_id %}" class="text-capitalize">{{Cust.first_name}} {{Cust.last_name}}</a>
+                                        </td>
+                                       {% endif %}
+                                       <td>{{Cust.Plant_Capacity}} Kwp</td>
+                                       <td class="text-capitalize">{{Cust.Ups_Soft}}</td>
+                                       <td class="text-capitalize">{{Cust.Cust_type}}</td>
+                                       <td>{{Cust.phone}}</td>
+                                       <td class="text-capitalize">{{Cust.City}}</td>
+                                       <td>{{Cust.Cus_Act_Date}}</td>
+                                       <td>{{Cust.new_customer.email}}</td>
+<!--                                   <td class="text-right">-->
+                                       <td class="text-left">
+                                          <div class="actions text-center">
+                                             <a href="{% url 'customer-customer-update' Cust.Cust_id %}" class="btn btn-sm bg-success-light mr-2">
+                                             <i class="fas fa-pen"></i>
+                                             </a>
+<!--                                             <a href="#" class="btn btn-sm bg-danger-light">-->
+<!--                                             <i class="fas fa-trash"></i>-->
+<!--                                             </a>-->
+                                          </div>
+                                       </td>
+                                    </tr>
+                                 {% endfor %}
+                                 </tbody>
+
+                              </table>
+                               </div>
+                              {% endif %}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            </div>
+            {% endblock %}
+
+
+
+

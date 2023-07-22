@@ -1,0 +1,139 @@
+{% extends 'partials/base.html' %}
+{% block title %}Customer Page{% endblock %}
+{% load static %}
+{% block content %}
+<div class="card  m-1" xmlns="http://www.w3.org/1999/html">
+   <div class="card-body">
+      <div class="page-header">
+         <div class="row">
+            <div class="col-sm-12">
+               <h3 class="page-title text-capitalize">{{ user1.first_name }} {{ user1.last_name }} View Details</h3>
+               <ul class="breadcrumb" style="border-bottom : 2px solid orange">
+                  <li class="breadcrumb-item"><a href="students.html">Dashboard</a></li>
+                  <li class="breadcrumb-item active">View  Details</li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+         {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      <form method="post" enctype="multipart/form-data" action="/customer/view_all_cust/">
+         {% csrf_token %}
+         <table class="table table-bordered"  border="2">
+            <tr>
+               <th colspan="2">
+                  <h5 class="p-1 text-danger" style="border-bottom : 2px solid orange">Company Deatils View </h5>
+               </th>
+            </tr>
+            <tr bgcolor="lightgray">
+               <th>&nbsp;&nbsp; Customer Type</th>
+               <td class="text-capitalize">DB/ {{ customer.Cust_type }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Customer ID</th>
+               <td>DB/ Cust/ {{ customer.Cust_id }}</td>
+            </tr>
+            {% if customer.first_name %}
+            <tr>
+               <th>&nbsp;&nbsp; Full Name</th>
+               <td class="text-capitalize">{{ customer.first_name }} {{ customer.last_name }}</td>
+            </tr>
+
+            {% endif %}
+             <tr>
+               <th>&nbsp;&nbsp; Staff Name</th>
+               <td class="text-capitalize">{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            {% if customer.Comp_name %}
+            <tr>
+               <th>&nbsp;&nbsp; Company / Farm Name</th>
+               <td class="text-capitalize">{{ customer.Comp_name }}</td>
+            </tr>
+            {% endif %}
+            {% if customer.Gender %}
+            <tr>
+               <th>&nbsp;&nbsp; Gender</th>
+               <td class="text-capitalize">{{ customer.Gender }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+               <th>&nbsp;&nbsp; Plant Capacity</th>
+               <td class="text-capitalize">{{ customer.Plant_Capacity }} Kwp</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Solar Plate Company Name</th>
+               <td class="text-capitalize">{{ customer.solar_comp }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Inverter Comapny Name</th>
+               <td class="text-capitalize">{{ customer.UPSC }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Inverter Phase</th>
+               <td class="text-capitalize">{{ customer.phase }} Ph</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Plant Activation Date</th>
+               <td>{{ customer.Cus_Act_Date | date:'d/m/y' }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Inverter Software Company</th>
+               <td class="text-capitalize">{{ customer.Ups_Soft }}</td>
+            </tr>
+            <tr>
+               <th colspan="2">
+                  <h5 class="p-1 text-danger" style="border-bottom : 2px solid orange">Company Contact Deatils View </h5>
+               </th>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Company Phone No.</th>
+               <td>{{ customer.phone }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Company Email</th>
+               <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Address</th>
+               <td class="text-capitalize">{{ customer.Address }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; City</th>
+               <td class="text-capitalize">{{ customer.City }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; State</th>
+               <td class="text-capitalize">{{ customer.state }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; PinCode</th>
+               <td>{{ customer.Pincode }}</td>
+            </tr>
+            <tr>
+               <th colspan="2">
+                  <h5 class="p-1 text-danger" style="border-bottom : 2px solid orange">Company Basic Information View </h5>
+               </th>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Biling Consumer No</th>
+               <td>{{ customer.Consumer }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Billing Unit</th>
+               <td>{{ customer.Bill_unit }}</td>
+            </tr>
+            <tr>
+               <th>&nbsp;&nbsp; Load Sancution </th>
+               <td>{{ customer.loadsancution }}</td>
+            </tr>
+         </table>
+         <input type="submit" value="OK" class="btn btn-primary" data-href-template="customer/view_all_cust.html">
+      </form>
+   </div>
+</div>
+{% endblock %}

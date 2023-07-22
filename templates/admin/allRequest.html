@@ -1,0 +1,217 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<section class="content">
+     <div class="page-header">
+      <div class="row">
+         <div class="col">
+
+            <h1 class="m-0 page-title text-capitalize">All Request Details</h1>
+            <ul class="breadcrumb float-sm-left">
+               {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+                 <li class="breadcrumb-item"><a href="{% url 'dashboard-index' %}">Home</a></li>
+                 <li class="breadcrumb-item"><a href="{% url 'firereport-dashboard' %}">Dashboard</a></li>
+               {% else %}
+                 <li class="breadcrumb-item"><a href="{% url 'firereport-dashboard_staff' %}">Home</a></li>
+               {% endif %}
+               <li class="breadcrumb-item active">Complaints Teams</li>
+               <li class="breadcrumb-item active">All Request</li>
+            </ul>
+         </div>
+      </div>
+   </div>
+
+
+
+
+    <div class="container-fluid">
+         <div class="table-responsive">
+        <div class="row">
+
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+
+                    <div class="card-body border" style="background-color: gray">
+                        <table id="example1" class="table table-bordered table-striped" style="background-color: white">
+                            <thead>
+                            <tr class="text-center" style="background-color: lightgray; font-size: 15px">
+                                <th>Sr.No.</th>
+                                <th>Ticket No.</th>
+                                <th>Customer Name</th>
+                                <th>Contact Number</th>
+                                <th>Location</th>
+                                <th>Message</th>
+                                <th>Reporting Time</th>
+                                <th>Assign To</th>
+                                <th>Last Modified</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+
+                           <tbody>
+                              {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+                                {% for i in firereport %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td class="text-center">{{i.id}}</td>
+                                    <td class="text-capitalize">{{i.FullName}}</td>
+                                    <td>{{i.MobileNumber}}</td>
+                                    <td class="text-capitalize">{{i.Location}}</td>
+                                    <td class="text-capitalize">{{i.Message}}</td>
+                                    <td>{{i.Postingdate}}</td>
+                                    <td class="text-capitalize">{{i.AssignTo.first_name}} {{i.AssignTo.last_name}}</td>
+                                    <td>{{i.AssignedTime}}</td>
+                                    {% if i.Status == 'Request Completed' %}
+                                     <td class="text-center"><a class="badge success badge-center" href="{% url 'firereport-viewRequestDetails' i.id %}"><i class="fa fa-eye"></i> &nbsp;Completed</a></td>
+                                    {% elif i.Status == 'Assigned' %}
+                                        <td class="text-center"><a class="badge info" href="{% url 'firereport-viewRequestDetails' i.id %}"> <i class="fa fa-eye"></i> &nbsp;&nbsp;Assigned&nbsp;&nbsp; </a></td>
+                                    {% elif i.Status == 'Work in Progress' %}
+                                        <td class="text-center"><a class="badge warning" href="{% url 'firereport-viewRequestDetails' i.id %}"><i class="fa fa-eye"></i> Work Initiated </a></td>
+                                    {% elif i.Status == 'Team On the Way' %}
+                                        <td class="text-center"><a class="badge default" href="{% url 'firereport-viewRequestDetails' i.id %}"> <i class="fa fa-eye"></i> In Progress </a></td>
+                                    {% else %}
+                                        <td class="text-center"><a class="badge danger" href="{% url 'firereport-viewRequestDetails' i.id %}"> <i class="fa fa-eye"></i> &nbsp;New Request </a></td>
+                                    {% endif %}
+
+                                </tr>
+                                {% endfor %}
+                              {% else %}
+                                {% for i in firereport %}
+                                {% if i.AssignTo == user %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td class="text-center">{{i.id}}</td>
+                                    <td class="text-capitalize">{{i.FullName}}</td>
+                                    <td>{{i.MobileNumber}}</td>
+                                    <td class="text-capitalize">{{i.Location}}</td>
+                                    <td class="text-capitalize">{{i.Message}}</td>
+                                    <td>{{i.Postingdate}}</td>
+                                    <td class="text-capitalize">{{i.AssignTo.first_name}} {{i.AssignTo.last_name}}</td>
+                                    <td>{{i.AssignedTime}}</td>
+                                    {% if i.Status == 'Request Completed' %}
+                                     <td class="text-center"><a class="badge success badge-center" href="{% url 'firereport-viewRequestDetails' i.id %}"><i class="fa fa-eye"></i> &nbsp;Completed</a></td>
+                                    {% elif i.Status == 'Assigned' %}
+                                        <td class="text-center"><a class="badge info" href="{% url 'firereport-viewRequestDetails' i.id %}"> <i class="fa fa-eye"></i> &nbsp;&nbsp;Assigned&nbsp;&nbsp; </a></td>
+                                    {% elif i.Status == 'Work in Progress' %}
+                                        <td class="text-center"><a class="badge warning" href="{% url 'firereport-viewRequestDetails' i.id %}"><i class="fa fa-eye"></i> Work Initiated </a></td>
+                                    {% elif i.Status == 'Team On the Way' %}
+                                        <td class="text-center"><a class="badge default" href="{% url 'firereport-viewRequestDetails' i.id %}"> <i class="fa fa-eye"></i> In Progress </a></td>
+                                    {% else %}
+                                        <td class="text-center"><a class="badge danger" href="{% url 'firereport-viewRequestDetails' i.id %}"> <i class="fa fa-eye"></i> &nbsp;New Request </a></td>
+                                    {% endif %}
+
+
+                                </tr>
+                                {% if i.AssignTo != user %}
+                                  <tr class="text-center">
+                                      <td colspan="8" class="text-center"><h1>No customers found.</h1></td>
+                                  </tr>
+                                {% endif %}
+                                {% endif %}
+
+                                {% endfor %}
+
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<style>
+.badge {
+  border: 2px solid black ;
+  background-color: white;
+  color: black;
+  padding: 10px 20px 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 50px
+}
+.badge1 {
+  border: 2px solid black ;
+  background-color: white;
+  color: black;
+  padding: 5.5px 12px 6px 11px;
+  font-size: 14px;
+  cursor: pointer;
+  float: right;
+  border-radius: 30px
+
+}
+
+/* Green */
+.success:hover {
+  border-color: green;
+  background-color: white;
+  color: green;
+}
+
+.success {
+  background-color: green;
+  border-color: green;
+  color: white;
+}
+
+/* Blue */
+.info:hover {
+  border-color: #2196F3;
+  background: white;
+  color: dodgerblue;
+}
+
+.info {
+  background: #2196F3;
+  border-color: #2196F3;
+  color: white;
+}
+
+/* Orange */
+.warning:hover {
+  border-color: #ff9800;
+  background: white;
+  color: orange;
+}
+
+.warning {
+  background: #ff9800;
+  border-color: #ff9800;
+  color: white;
+}
+
+/* Red */
+.danger:hover {
+  border-color: #f44336;
+  background: white;
+  color: red;
+}
+
+.danger {
+  background: #f44336;
+  border-color: #f44336;
+  color: white;
+}
+
+/* Gray #e7e7e7 */
+.default:hover {
+  border-color: yellow;
+  background: white;
+  color: yellow;
+}
+
+.default {
+  background: yellow;
+  border-color: yellow;
+  color: black;
+}
+</style>
+{% endblock %}

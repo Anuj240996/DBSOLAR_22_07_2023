@@ -1,0 +1,315 @@
+{% extends 'partials/base.html' %}
+{% block title %}Consumer Page{% endblock %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="card shadow m-1">
+   <div class="card-body">
+      <div class="page-header">
+         <div class="row">
+            <div class="col-sm-12">
+               <h3 class="page-title">Employee Details</h3>
+               <ul class="breadcrumb" style="border-bottom : 2px solid orange">
+                  <li class="breadcrumb-item"><a href="students.html">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Employee Details</li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      {% if messages %}
+       {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+        </div> {% endfor %}
+      {% endif %}
+      <form method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+         <h5 class="p-2 text-danger" style="border-bottom : 2px solid orange">Company Details </h5>
+               <div class="card-body">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="about-info">
+                           <h4>About Me</h4>
+                           <div class="media mt-1">
+                              <ul>
+                                 <li>
+                                    <span>
+                                    <img class="img-thumbnail ml-2"  height="550px" src="{{ employee.image.url }}" class="card-img-top" height="200px" alt="profile-image">
+
+                                    </span>
+
+                                 </li>
+                                 <li>
+                                    <small class="text-muted">Currently:  <a href="{{ employee.image.url }}">{{ employee.image }}</a></small>
+                                 </li>
+                                 <li>
+                                    <span>
+                                    Change:<input type="file" name="image" accept="image/*" class="clearablefileinput form-control-file" id="id_image">
+                                    </span>
+                                 </li>
+                              </ul>
+                              <div class="media-body ml-5">
+                              <ul class="ml-5">
+                                 <li>
+                                    </b><span class="title-span"><b>Employee ID</b></span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3">  DB/{{ user1.id }}</span>
+                                 </li>
+                                 <li>
+                                    <span class="title-span"><b>Username </b> </span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3">{{ user1.username }}</span>
+                                 </li>
+                                 <li>
+                                    <span class="title-span"><b>Full Name </b> </span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3 text-capitalize">{{ user1.first_name }} {{ user1.last_name }}</span>
+                                 </li>
+                                 <li>
+                                    <span class="title-span"><b>Mobile</b>  </span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3">{{ employee.workphone }}</span>
+                                 </li>
+                                 <li>
+                                    <span class="title-span"><b>Email</b>  </span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3">{{ user1.email }}</span>
+                                 </li>
+                                 <li>
+                                    <span class="title-span"><b>Designation</b>  </span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3 text-capitalize">{{ employee.designation }} - {{ employee.department }}</span>
+                                 </li>
+                                 <li>
+                                    <span class="title-span"><b>Date Of Birth</b> </span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3">{{ employee.DOB|date:"j F Y" }}</span>
+                                 </li>
+                                 <li>
+                                    <span class="title-span"><b>Date Of Joining</b> </span>
+                                    <span> : </span>
+                                    <span class="info-span ml-3">{{ user1.date_joined|date:"j F Y" }}</span>
+                                 </li>
+                              </ul>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+                  <h5 class="p-2 text-danger" style="border-bottom : 2px solid orange">Work Information </h5>
+
+                 {% comment %}
+<!--                  <div class="form-row">-->
+<!--                     <div class="col-sm-3">-->
+<!--                        <div class="form-group">-->
+<!--                           <label for="{{ form.is_active.id_for_label }}">Is Active:</label>-->
+<!--                           <input type="checkbox" name="{{ form.is_active.name }}" id="{{ form.is_active.id_for_label }}" {% if user.is_active %}checked{% endif %}>-->
+<!--                        </div>-->
+<!--                     </div>-->
+<!--                  </div>-->
+                  {% endcomment %}
+                  <div class="form-row">
+
+                     <div class="col-md-3">
+
+                           <label><b> Current Department :</b></label>
+                           <input type="text" name="dept1" disabled class="form-control text-capitalize" placeholder="enter Department" value="{{ employee.department }}">
+                     </div>
+                     <div class="col-md-3">
+
+                           <label><b> Change Department :</b></label><br>
+                           <select id="dept" name="dept" style="width: 210px; height: 40px; font-size: 16px;">
+                              <option value="" selected disabled class="text-center">-- Select Department --</option>
+                            {% for department in departments %}
+                                <option value="{{ department.0 }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ department.1 }}</option>
+                            {% endfor %}
+                           </select>
+
+
+                     </div>
+                     <div class="col-md-3">
+
+                           <label> <b>Current Designation :</b></label>
+                           <input type="text" name="desig1" disabled class="form-control text-capitalize" placeholder="enter Designation" value="{{ employee.designation }}">
+
+                     </div>
+                     <div class="col-md-3">
+
+                           <label><b> Change Designation :</b></label><br>
+                           <select id="desig" name="desig" style="width: 210px; height: 40px; font-size: 16px;">
+                              <option value="" selected disabled class="text-center">--Select Designation--</option>
+                            {% for designation in designations %}
+                                <option value="{{ designation.0 }}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ designation.1 }}</option>
+                            {% endfor %}
+                           </select>
+
+
+
+                    </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Date Of Joining : </b>   [{{ user1.date_joined|date:'d/m/y' }}]</label>
+                           <input type="date" name="jod" class="form-control" placeholder="enter Date of Joining" value="{{ user1.date_joined }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Work Email :</b></label>
+                           <input type="email" name="email" class="form-control" value="{{ user1.email }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label><b> Phone No :</b></label>
+                           <input type="text" name="ph" class="form-control" placeholder="Enter Phone No" value="{{ employee.workphone }}">
+                        </div>
+                     </div>
+
+                     <div class="col-sm-12">
+                        <h5 class="p-2 text-danger" style="border-bottom : 2px solid orange">Personal Details </h5>
+                     </div>
+
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b> First Name : </b></label>
+                           <input type="text" name="firstname" class="form-control text-capitalize" value="{{ user1.first_name }}" >
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Last Name :</b></label>
+                           <input type="text" name="lastname" class="form-control text-capitalize" value="{{ user1.last_name }}" >
+                        </div>
+                     </div>
+
+
+
+                     <div class="col-sm-3">
+                        <div class="form-group">
+                           <label><b> Current Blood Group:</b></label>
+                           <input type="text" disabled name="bg1" class="form-control" placeholder="enter Blood Group" value="{{ employee.bg }}">
+                        </div>
+
+                     </div>
+                     <div class="col-sm-3">
+                        <div class="form-group">
+                           <label><b> Change Blood Group :</b></label><br>
+                           <select id="bg" name="bg" style="width: 210px; height: 40px; font-size: 16px;">
+                              <option value="" selected disabled class="text-center">--- Select Blood Group ---</option>
+                            {% for bg in bgs %}
+                                <option value="{{ bg.0 }}" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ bg.1 }}</option>
+                            {% endfor %}
+                           </select>
+                        </div>
+
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Date Of Birth : </b>   [{{ employee.DOB|date:'d/m/y' }}]</label>
+                           <input type="date" name="DOB" class="form-control text-capitalize" placeholder="enter Date of Birth" value="{{ employee.DOB }}">
+                        </div>
+                     </div>
+
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Address :</b></label>
+                           <input type="text" name="address" class="form-control text-capitalize" placeholder="enter Address" value="{{ employee.address }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>City :</b></label>
+                           <input type="text" name="city" class="form-control text-capitalize" placeholder="enter City" value="{{ employee.city }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Taluka :</b></label>
+                           <input type="text" name="taluka" class="form-control text-capitalize" placeholder="enter Taluka" value="{{ employee.taluka }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>District :</b></label>
+                           <input type="text" name="district" class="form-control text-capitalize" placeholder="enter District" value="{{ employee.district }}">
+                        </div>
+                     </div>
+
+                     <div class="col-sm-12">
+                        <h5 class="p-2 text-danger" style="border-bottom : 2px solid orange">Educational Details </h5>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label><b> PG Education Name :</b></label>
+                           <input type="text" name="pg" class="form-control" placeholder="enter PG Education Name" value="{{ employee.pg }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Institution : </b> </label>
+                           <input type="text" name="institution" class="form-control" placeholder="enter Institution" value="{{ employee.institution }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Year Of Passing : </b>   [{{ employee.yop|date:'d/m/y' }}]</label>
+                           <input type="date" name="yop" class="form-control text-capitalize" placeholder="enter Year Of Passing" value="{{ employee.yop }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Specialization :</b></label>
+                           <input type="text" name="specili" class="form-control text-capitalize" placeholder="enter Specilization" value="{{ employee.specili }}">
+                        </div>
+                     </div>
+
+                     <div class="col-sm-12">
+                        <h5 class="p-2 text-danger" style="border-bottom : 2px solid orange">Emergency Contact Details </h5>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label><b> Name :</b></label>
+                           <input type="text" name="name" class="form-control" placeholder="enter name" value="{{ employee.name }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Mobile No </b></label>
+                           <input type="text" name="phone" class="form-control" placeholder="enter Mobile No" value="{{ employee.phone }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Email :</b></label>
+                           <input type="email" name="emremail" class="form-control text-capitalize" placeholder="enter Email" value="{{ employee.email }}">
+                        </div>
+                     </div>
+                     <div class="col-sm-6">
+                        <div class="form-group">
+                           <label> <b>Address :</b></label>
+                           <input type="text" name="emraddress" class="form-control text-capitalize" placeholder="enter Address" value="{{ employee.emraddress }}">
+                        </div>
+                     </div>
+
+
+
+                  </div>
+            <input type="submit" value="SUBMIT" class="btn btn-primary">
+         </div>
+      </form>
+   </div>
+</div>
+
+{% if error == "no" %}
+<script>
+   alert(' {{user1.first_name }} {{user1.last_name }} Profile Update Successful');
+   window.location = ('{% url 'user-profile-updatepage' user1.id %}')
+</script>
+{% endif %}
+{% if error == "yes" %}
+<script>
+   alert('Something went wrong , Try Again...');
+</script>
+{% endif %}
+{% endblock %}

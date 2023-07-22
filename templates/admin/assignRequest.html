@@ -1,0 +1,116 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="content">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Assigned Request Details</h1>
+                </div>
+
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{% url 'firereport-dashboard' %}">Home</a></li>
+<!--                        <li class="breadcrumb-item active">Fire Control Teams</li>-->
+                        <li class="breadcrumb-item active">Assigned Request</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid">
+         <div class="table-responsive">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Assigned Request Report</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr class="text-center">
+                                <th>Sr No</th>
+                                <th>Complaint No</th>
+                                <th>Name</th>
+                                <th>Mobile Number</th>
+                                <th>Location</th>
+                                <th>Message</th>
+                                <th>Reporting Time</th>
+                                <th>Status</th>
+                                <th>Assign To</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                              {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+                                {% for i in firereport %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td class="text-center">{{i.id}}</td>
+                                    <td>{{i.FullName}}</td>
+                                    <td>{{i.MobileNumber}}</td>
+                                    <td>{{i.Location}}</td>
+                                    <td>{{i.Message}}</td>
+                                    <td>{{i.Postingdate}}</td>
+                                    <td>{{i.Status}}</td>
+                                    <td>{{i.AssignTo.first_name}}  {{i.AssignTo.last_name}}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <a class="btn btn-primary" href="{% url 'firereport-viewRequestDetails' i.id %}"><i class="fa fa-eye"></i></a> &nbsp;&nbsp;
+<!--                                            <a class="btn btn-danger" onclick="return confirm('Are you sure to Delete ?')" href="{% url 'firereport-deleteRequest' i.id %}"><i-->
+<!--                                                class="fa fa-trash-alt"></i></a>-->
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                {% for i in firereport %}
+                                {% if i.AssignTo == user %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td class="text-center">{{i.id}}</td>
+                                    <td>{{i.FullName}}</td>
+                                    <td>{{i.MobileNumber}}</td>
+                                    <td>{{i.Location}}</td>
+                                    <td>{{i.Message}}</td>
+                                    <td>{{i.Postingdate}}</td>
+                                    <td>{{i.Status}}</td>
+                                    <td>{{i.AssignTo.first_name}}  {{i.AssignTo.last_name}}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <a class="btn btn-primary" href="{% url 'firereport-viewRequestDetails' i.id %}"><i class="fa fa-eye"></i></a> &nbsp;&nbsp;
+<!--                                            <a class="btn btn-danger" onclick="return confirm('Are you sure to Delete ?')" href="{% url 'firereport-deleteRequest' i.id %}"><i-->
+<!--                                                class="fa fa-trash-alt"></i></a>-->
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% if i.AssignTo != user %}
+                                  <tr class="text-center">
+                                      <td colspan="8" class="text-center"><h1>No customers found.</h1></td>
+                                  </tr>
+                                {% endif %}
+                                {% endif %}
+
+                                {% endfor %}
+
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+{% endblock %}

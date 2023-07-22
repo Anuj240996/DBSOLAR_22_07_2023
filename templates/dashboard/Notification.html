@@ -1,0 +1,176 @@
+{% extends 'partials/base.html' %}
+{% block title %}Order Page{% endblock %}
+{% load static %}
+{% block content %}
+<!--{% block nav-btn %}-->
+<!--           {{ notification.count }}-->
+<!--           {% endblock nav-btn %}-->
+
+
+<div class="wrapper">
+   <div class="content container-fluid">
+      <div class="page-header">
+         <div class="row align-items-center">
+            <div class="col">
+               <h3 class="page-title">Notoifcation</h3>
+               <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                  <li class="breadcrumb-item active">Notification</li>
+               </ul>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+<!--               &lt;!&ndash; Button trigger modal &ndash;&gt;-->
+<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">-->
+<!--  View Notification-->
+<!--</button>-->
+
+
+
+            </div>
+         </div>
+      </div>
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+         {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      <div class="row">
+         <div class="col-sm-12">
+            <div class="card card-table">
+               <div class="card-body">
+                  <div class="table-responsive">
+
+
+                     <div class="table-responsive">
+                     <table class="table table-hover table-center table.dataTable.table-sm mb-0 datatable table.sm">
+                        <thead class="table-success">
+                           <tr>
+                              <th scope="col" class="text-center ml-0" style="width:30%">Message</th>
+                              <th scope="col">Date & Time</th>
+                               <th scope="col">Sender Name</th>
+
+                               <th scope="col" class="text-right ml-6">Action</th>
+
+                           </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in notification %}
+                           <tr>
+                              <td style="width:30%">{{i.message}}</td>
+                              <td>{{i.created_at | date:"d/m/Y H:i:s"}}</td>
+                               <td class="text-capitalize text-center">{{i.sender.profile.designation}}</td>
+
+                               <td class="text-right">
+                                   <div class="Action">
+                                       {% if i.status == 0 %}
+                                     <a href="{% url 'Staff_Notification_Mark_Done' status=i.id %}" class="btn btn-primary">Mark As Done</a>
+                                        {% else %}
+                                     <button class="btn btn-primary" disabled="disabled">Mark As Done</button>
+                                       {% endif %}
+                                   </div>
+                                    </td>
+                           </tr>
+                        {% endfor %}
+
+                        </tbody>
+
+                     </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">View All Notification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <div class="row">
+         <div class="col-sm-12">
+            <div class="card card-table">
+               <div class="card-body">
+                  <div class="table-responsive">
+
+
+
+                     <table class="table table-hover table-center table.dataTable.table-sm mb-0 datatable table.sm">
+                        <thead class="table-success">
+                           <tr>
+
+
+                               <th scope="col" style="width:60%">Message</th>
+                               <th scope="col" style="width:30%" class="text-right">Status</th>
+
+                           </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in see_notification %}
+                           <tr>
+
+                              <td>{{i.message}}</td>
+
+                               {% if i.status == 0 %}
+                               <td><span class="badge badge-danger badge-lg"> UnRead The Message</span></td>
+                               {% else %}
+                                <td><span class="badge badge-success badge-lg"> Read The Message</span></td>
+                               {% endif %}
+
+                           </tr>
+                        {% endfor %}
+
+                        </tbody>
+
+                     </table>
+
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+{% for i in staff %}
+<div class="modal fade" id="sendnotification-{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle1">Send Notification To {{i.first_name}} {{i.last_name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'dashboard-save_staff_notification' %}">
+            {% csrf_token %}
+            <div class="form-group">
+             <input type="text" class="form-control" name="message" >
+                <input type="text" class="form-control" name="staff_id" value="{{i.id}}" hidden>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Notification</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
